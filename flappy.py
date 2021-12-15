@@ -33,6 +33,7 @@ def check_collision(pipes):
 	global can_score
 	for pipe in pipes:
 		if bird_rect.colliderect(pipe):
+			death_sound.play()
 			can_score = True
 			return False
 
@@ -80,6 +81,7 @@ def pipe_score_check():
 		for pipe in pipe_list:
 			if 95 <pipe.centerx < 105 and can_score:
 				score += 1
+				score_sound.play()
 				can_score = False
 			if pipe.centerx < 0:
 					can_score = True
@@ -133,6 +135,11 @@ pipe_height = [400, 600, 700, 750, 800]
 game_over_surface = pygame.transform.scale2x(pygame.image.load('assets/message.png').convert_alpha())
 game_over_rect = game_over_surface.get_rect(center = (288, 512))
 
+# sounds
+flap_sound = pygame.mixer.Sound('sound/sfx_wing.wav')
+death_sound = pygame.mixer.Sound('sound/sfx_hit.wav')
+score_sound = pygame.mixer.Sound('sound/sfx_point.wav')
+
 # game loop
 while True:
 	# event loop
@@ -148,6 +155,7 @@ while True:
 			if event.key == pygame.K_SPACE and game_active:
 				bird_movement = 0
 				bird_movement -= 8
+				flap_sound.play()
 			
 			# if user presses spacebar while the game is not active
 			if event.key == pygame.K_SPACE and game_active == False:
