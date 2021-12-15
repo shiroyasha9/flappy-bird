@@ -30,11 +30,14 @@ def draw_pipes(pipes):
 
 # check collision between the bird and the pipes or the top and bottom of the screen
 def check_collision(pipes):
+	global can_score
 	for pipe in pipes:
 		if bird_rect.colliderect(pipe):
+			can_score = True
 			return False
 
 	if bird_rect.top <= -100 or bird_rect.bottom >= 900:
+		can_score = True
 		return False
 	
 	return True
@@ -49,16 +52,52 @@ def bird_animation():
 	new_bird_rect = new_bird.get_rect(center = (100, bird_rect.centery))
 	return new_bird, new_bird_rect
 
+# display the score and high score
+def score_display(game_state):
+	if game_state == 'main_game':
+		score_surface = game_font.render(f'Score: {int(score)}', True, (255,255,255))
+		score_rect = score_surface.get_rect(center = (288, 100))
+		screen.blit(score_surface, score_rect)
+	if game_state == 'game_over':
+		score_surface = game_font.render(f'Score: {int(score)}', True, (255,255,255))
+		score_rect = score_surface.get_rect(center = (288, 100))
+		screen.blit(score_surface, score_rect)
+
+		high_score_surface = game_font.render(f'High score: {int(high_score)}', True, (255,255,255))
+		high_score_rect = high_score_surface.get_rect(center = (288, 850))
+		screen.blit(high_score_surface, high_score_rect)
+
+# logic for updating the high score
+def update_high_score(score, high_score):
+	if score > high_score:
+		high_score = score
+	return high_score
+
+# logic for adding a score when bird passes the pipe
+def pipe_score_check():
+	global score, can_score
+	if pipe_list:
+		for pipe in pipe_list:
+			if 95 <pipe.centerx < 105 and can_score:
+				score += 1
+				can_score = False
+			if pipe.centerx < 0:
+					can_score = True
+
 # initialization
 pygame.init()
 
 screen = pygame.display.set_mode((576, 1024)) #width, height
 clock = pygame.time.Clock()
+game_font = pygame.font.Font('04B_19.TTF', 40)
 
 #Game variables
 gravity = 0.20
 bird_movement = 0
 game_active = True
+score = 0
+high_score = 0
+can_score = True
 
 # background surface
 bg_surface = pygame.image.load('assets/background-day.png').convert()
@@ -112,6 +151,7 @@ while True:
 				pipe_list.clear()
 				bird_rect.center = (100, 512)
 				bird_movement = 0
+				score = 0
 
 		# custom event for spawning pipe
 		if event.type == SPAWNPIPE:
@@ -138,8 +178,14 @@ while True:
 		# Pipes
 		pipe_list = move_pipes(pipe_list)
 		draw_pipes(pipe_list)
+
+		# Score
+		pipe_score_check()
+		score_display('main_game')
 	else: 
-		pass
+		high_score = update_high_score(score, high_score)
+		score_display('game_over')
+
 
 	# Floor
 	floor_x_position -= 1
