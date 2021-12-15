@@ -1,9 +1,32 @@
-import pygame, sys
+import pygame, sys, random
 
 # draw the moving floor
 def draw_floor():
 	screen.blit(floor_surface, (floor_x_position,900))
 	screen.blit(floor_surface, (floor_x_position + 576,900))
+
+# create the top and bottom pipes
+def create_pipe():
+	random_pipe_position = random.choice(pipe_height)
+	bottom_pipe = pipe_surface.get_rect(midtop = (700, random_pipe_position))
+	top_pipe = pipe_surface.get_rect(midbottom = (700, random_pipe_position - 300))
+	return bottom_pipe, top_pipe
+
+# move the pipes and delete the pipes that are not visible
+def move_pipes(pipes):
+	for pipe in pipes:
+		pipe.centerx -= 5
+	visible_pipes = [pipe for pipe in pipes if pipe.right > -50]
+	return visible_pipes
+
+# draw the pipes on the screen
+def draw_pipes(pipes):
+	for pipe in pipes:
+		if pipe.bottom >= 1024:
+			screen.blit(pipe_surface, pipe)
+		else:
+			flip_pipe = pygame.transform.flip(pipe_surface, False, True)
+			screen.blit(flip_pipe, pipe)
 
 # initialization
 pygame.init()
@@ -28,6 +51,14 @@ bird_surface = pygame.image.load('assets/bluebird-midflap.png').convert()
 bird_surface = pygame.transform.scale2x(bird_surface)
 bird_rect = bird_surface.get_rect(center = (100,512))
 
+# pipe surface and pipe userevent
+pipe_surface = pygame.image.load('assets/pipe-green.png').convert()
+pipe_surface = pygame.transform.scale2x(pipe_surface)
+pipe_list = []
+SPAWNPIPE = pygame.USEREVENT
+pygame.time.set_timer(SPAWNPIPE, 1200)
+pipe_height = [400, 600, 700, 750, 800]
+
 # game loop
 while True:
 	# event loop
@@ -43,6 +74,10 @@ while True:
 			if event.key == pygame.K_SPACE:
 				bird_movement = 0
 				bird_movement -= 8
+		
+		# custom event for spawning pipe
+		if event.type == SPAWNPIPE:
+			pipe_list.extend(create_pipe())
 					
 	screen.blit(bg_surface, (0,0))
 
@@ -50,6 +85,10 @@ while True:
 	bird_movement += gravity
 	bird_rect.centery += bird_movement
 	screen.blit(bird_surface, bird_rect)
+
+	# Pipes
+	pipe_list = move_pipes(pipe_list)
+	draw_pipes(pipe_list)
 
 	# Floor
 	floor_x_position -= 1
