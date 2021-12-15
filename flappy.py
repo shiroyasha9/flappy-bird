@@ -88,7 +88,6 @@ def pipe_score_check():
 
 # initialization
 pygame.init()
-pygame.font.init()
 
 screen = pygame.display.set_mode((576, 1024)) #width, height
 clock = pygame.time.Clock()
@@ -124,10 +123,6 @@ bird_rect = bird_surface.get_rect(center = (100,512))
 BIRDFLAP = pygame.USEREVENT
 pygame.time.set_timer(BIRDFLAP, 200)
 
-# bird_surface = pygame.image.load('assets/bluebird-midflap.png').convert()
-# bird_surface = pygame.transform.scale2x(bird_surface)
-# bird_rect = bird_surface.get_rect(center = (100,512))
-
 # pipe surface and pipe userevent
 pipe_surface = pygame.image.load('assets/pipe-green.png').convert()
 pipe_surface = pygame.transform.scale2x(pipe_surface)
@@ -144,7 +139,6 @@ game_over_rect = game_over_surface.get_rect(center = (288, 512))
 flap_sound = pygame.mixer.Sound('sound/sfx_wing.wav')
 death_sound = pygame.mixer.Sound('sound/sfx_hit.wav')
 score_sound = pygame.mixer.Sound('sound/sfx_point.wav')
-score_sound_countdown = 100
 
 # game loop
 while True:
