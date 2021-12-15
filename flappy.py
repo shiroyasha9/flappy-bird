@@ -39,6 +39,16 @@ def check_collision(pipes):
 	
 	return True
 
+# rotate the bird while flapping
+def rotate_bird(bird):
+	return pygame.transform.rotate(bird, -bird_movement * 3)
+	
+# animate the bird flap
+def bird_animation():
+	new_bird = bird_frames[bird_index]
+	new_bird_rect = new_bird.get_rect(center = (100, bird_rect.centery))
+	return new_bird, new_bird_rect
+
 # initialization
 pygame.init()
 
@@ -59,9 +69,18 @@ floor_surface = pygame.image.load('assets/base.png').convert()
 floor_surface = pygame.transform.scale2x(floor_surface)
 floor_x_position = 0
 
-bird_surface = pygame.image.load('assets/bluebird-midflap.png').convert()
-bird_surface = pygame.transform.scale2x(bird_surface)
+# bird images and surface
+bird_downflap = pygame.transform.scale2x(pygame.image.load('assets/bluebird-downflap.png').convert())
+bird_midflap = pygame.transform.scale2x(pygame.image.load('assets/bluebird-midflap.png').convert())
+bird_upflap = pygame.transform.scale2x(pygame.image.load('assets/bluebird-upflap.png').convert())
+bird_frames = [bird_downflap, bird_midflap, bird_upflap]
+bird_index = 0
+bird_surface = bird_frames[bird_index]
 bird_rect = bird_surface.get_rect(center = (100,512))
+
+# bird userevent
+BIRDFLAP = pygame.USEREVENT
+pygame.time.set_timer(BIRDFLAP, 200)
 
 # pipe surface and pipe userevent
 pipe_surface = pygame.image.load('assets/pipe-green.png').convert()
@@ -93,24 +112,33 @@ while True:
 				pipe_list.clear()
 				bird_rect.center = (100, 512)
 				bird_movement = 0
-		
+
 		# custom event for spawning pipe
 		if event.type == SPAWNPIPE:
 			pipe_list.extend(create_pipe())
+
+		# custom event for flapping bird wings
+		if event.type == BIRDFLAP:
+			if bird_index == 2:
+				bird_index = 0
+			else:
+				bird_index += 1
+			bird_surface, bird_rect = bird_animation()
 					
 	screen.blit(bg_surface, (0,0))
 
 	if game_active:
 		# Bird
 		bird_movement += gravity
+		rotated_bird = rotate_bird(bird_surface)
 		bird_rect.centery += bird_movement
-		screen.blit(bird_surface, bird_rect)
+		screen.blit(rotated_bird, bird_rect)
 		game_active = check_collision(pipe_list)
 
 		# Pipes
 		pipe_list = move_pipes(pipe_list)
 		draw_pipes(pipe_list)
-	else:
+	else: 
 		pass
 
 	# Floor
