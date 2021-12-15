@@ -20,6 +20,11 @@ Navigate to the folder and install the requirements using pip
 
 
 ## Screenshots
+Main Screen
 
-![App Screenshot](https://drive.google.com/file/d/1odvu-TtWUsILS8HG1of2SBmLsxd6Quco/view?usp=sharing)
+![Screenshot_55](https://user-images.githubusercontent.com/48734821/146188403-feb7047b-dcdc-4f5a-ae32-178036d7327c.png)
+
+In Game
+
+![Screenshot_56](https://user-images.githubusercontent.com/48734821/146188443-031952e3-38fe-433e-9270-5cff5266e712.png)
 
