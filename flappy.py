@@ -3,12 +3,17 @@ import pygame, sys
 # draw the moving floor
 def draw_floor():
 	screen.blit(floor_surface, (floor_x_position,900))
-	screen.blit(floor_surface, (floor_x_position + 576,900))
+	screen.blit(floor_surface, (floor_x_position + width,900))
 
 # initialization
 pygame.init()
+# width = 576
+# height = 1024
+width = 432
+height = 768
 
-screen = pygame.display.set_mode((576, 1024)) #width, height
+screen = pygame.display.set_mode((width, height)) #width, height
+
 clock = pygame.time.Clock()
 
 # background surface
@@ -34,7 +39,7 @@ while True:
 	# Floor
 	floor_x_position -= 1
 	draw_floor()
-	if floor_x_position <= -576:
+	if floor_x_position <= -width:
 		floor_x_position = 0
 	
 	# update the display with the max refresh rate being 120hz
