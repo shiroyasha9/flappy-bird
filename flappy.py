@@ -3,7 +3,7 @@ import pygame, sys, random
 # draw the moving floor
 def draw_floor():
 	screen.blit(floor_surface, (floor_x_position,900))
-	screen.blit(floor_surface, (floor_x_position + 576,900))
+	screen.blit(floor_surface, (floor_x_position + width,900))
 
 # create the top and bottom pipes
 def create_pipe():
@@ -22,7 +22,7 @@ def move_pipes(pipes):
 # draw the pipes on the screen
 def draw_pipes(pipes):
 	for pipe in pipes:
-		if pipe.bottom >= 1024:
+		if pipe.bottom >= height:
 			screen.blit(pipe_surface, pipe)
 		else:
 			flip_pipe = pygame.transform.flip(pipe_surface, False, True)
@@ -56,15 +56,15 @@ def bird_animation():
 def score_display(game_state):
 	if game_state == 'main_game':
 		score_surface = game_font.render(f'Score: {int(score)}', True, (255,255,255))
-		score_rect = score_surface.get_rect(center = (288, 100))
+		score_rect = score_surface.get_rect(center = (216, 100))
 		screen.blit(score_surface, score_rect)
 	if game_state == 'game_over':
 		score_surface = game_font.render(f'Score: {int(score)}', True, (255,255,255))
-		score_rect = score_surface.get_rect(center = (288, 100))
+		score_rect = score_surface.get_rect(center = (216, 100))
 		screen.blit(score_surface, score_rect)
 
 		high_score_surface = game_font.render(f'High score: {int(high_score)}', True, (255,255,255))
-		high_score_rect = high_score_surface.get_rect(center = (288, 850))
+		high_score_rect = high_score_surface.get_rect(center = (216, 550))
 		screen.blit(high_score_surface, high_score_rect)
 
 # logic for updating the high score
@@ -86,8 +86,11 @@ def pipe_score_check():
 
 # initialization
 pygame.init()
-
-screen = pygame.display.set_mode((576, 1024)) #width, height
+# width = 576
+# height = 1024
+width = 432
+height = 768
+screen = pygame.display.set_mode((width, height)) #width, height
 clock = pygame.time.Clock()
 game_font = pygame.font.Font('04B_19.TTF', 40)
 
@@ -115,7 +118,7 @@ bird_upflap = pygame.transform.scale2x(pygame.image.load('assets/bluebird-upflap
 bird_frames = [bird_downflap, bird_midflap, bird_upflap]
 bird_index = 0
 bird_surface = bird_frames[bird_index]
-bird_rect = bird_surface.get_rect(center = (100,512))
+bird_rect = bird_surface.get_rect(center = (100,384))
 
 # bird userevent
 BIRDFLAP = pygame.USEREVENT
@@ -127,11 +130,11 @@ pipe_surface = pygame.transform.scale2x(pipe_surface)
 pipe_list = []
 SPAWNPIPE = pygame.USEREVENT
 pygame.time.set_timer(SPAWNPIPE, 1200)
-pipe_height = [400, 600, 700, 750, 800]
+pipe_height = [400, 500, 600,700]
 
 # game over surface
-game_over_surface = pygame.transform.scale2x(pygame.image.load('assets/message.png').convert_alpha())
-game_over_rect = game_over_surface.get_rect(center = (288, 512))
+game_over_surface = pygame.image.load('assets/message.png').convert_alpha()
+game_over_rect = game_over_surface.get_rect(center = (216, 354))
 
 # game loop
 while True:
@@ -153,7 +156,7 @@ while True:
 			if event.key == pygame.K_SPACE and game_active == False:
 				game_active = True
 				pipe_list.clear()
-				bird_rect.center = (100, 512)
+				bird_rect.center = (100, 384)
 				bird_movement = 0
 				score = 0
 
@@ -195,7 +198,7 @@ while True:
 	# Floor
 	floor_x_position -= 1
 	draw_floor()
-	if floor_x_position <= -576:
+	if floor_x_position <= -width:
 		floor_x_position = 0
 	
 	# update the display with the max refresh rate being 120hz
