@@ -1,214 +1,169 @@
-import pygame, sys, random
+# Legendary hello world
+print('Hello World')
 
-# draw the moving floor
-def draw_floor():
-	screen.blit(floor_surface, (floor_x_position,900))
-	screen.blit(floor_surface, (floor_x_position + width,900))
+# basic arithmetic
+print(1+1)
 
-# create the top and bottom pipes
-def create_pipe():
-	random_pipe_position = random.choice(pipe_height)
-	bottom_pipe = pipe_surface.get_rect(midtop = (700, random_pipe_position))
-	top_pipe = pipe_surface.get_rect(midbottom = (700, random_pipe_position - 300))
-	return bottom_pipe, top_pipe
+print(2 * 3)
 
-# move the pipes and delete the pipes that are not visible
-def move_pipes(pipes):
-	for pipe in pipes:
-		pipe.centerx -= 5
-	visible_pipes = [pipe for pipe in pipes if pipe.right > -50]
-	return visible_pipes
+print(1/2)
 
-# draw the pipes on the screen
-def draw_pipes(pipes):
-	for pipe in pipes:
-		if pipe.bottom >= height:
-			screen.blit(pipe_surface, pipe)
-		else:
-			flip_pipe = pygame.transform.flip(pipe_surface, False, True)
-			screen.blit(flip_pipe, pipe)
+print(2**4)
 
-# check collision between the bird and the pipes or the top and bottom of the screen
-def check_collision(pipes):
-	global can_score
-	for pipe in pipes:
-		if bird_rect.colliderect(pipe):
-			death_sound.play()
-			can_score = True
-			return False
+print(4 % 2)
 
-	if bird_rect.top <= -100 or bird_rect.bottom >= 900:
-		can_score = True
-		return False
-	
-	return True
+print(5 % 2)
 
-# rotate the bird while flapping
-def rotate_bird(bird):
-	return pygame.transform.rotate(bird, -bird_movement * 3)
-	
-# animate the bird flap
-def bird_animation():
-	new_bird = bird_frames[bird_index]
-	new_bird_rect = new_bird.get_rect(center = (100, bird_rect.centery))
-	return new_bird, new_bird_rect
+print((2+3) * (5-2))
 
-# display the score and high score
-def score_display(game_state):
-	if game_state == 'main_game':
-		score_surface = game_font.render(f'Score: {int(score)}', True, (255,255,255))
-		score_rect = score_surface.get_rect(center = (216, 100))
-		screen.blit(score_surface, score_rect)
-	if game_state == 'game_over':
-		score_surface = game_font.render(f'Score: {int(score)}', True, (255,255,255))
-		score_rect = score_surface.get_rect(center = (216, 100))
-		screen.blit(score_surface, score_rect)
+# Variables
+name = 'Mubin'
+print(name)
 
-		high_score_surface = game_font.render(f'High score: {int(high_score)}', True, (255,255,255))
-		high_score_rect = high_score_surface.get_rect(center = (216, 550))
-		screen.blit(high_score_surface, high_score_rect)
+# Variable names cannot start with number or special characters
+x = 4
+y = 9
 
-# logic for updating the high score
-def update_high_score(score, high_score):
-	if score > high_score:
-		high_score = score
-	return high_score
+z = x + y
+print(z)
 
-# logic for adding a score when bird passes the pipe
-def pipe_score_check():
-	global score, can_score
-	if pipe_list:
-		for pipe in pipe_list:
-			if 95 <pipe.centerx < 105 and can_score:
-				score += 1
-				score_sound.play()
-				can_score = False
-			if pipe.centerx < 0:
-					can_score = True
+# Strings
+print('in single quotes')
+print("in double quotes")
+print("Mubin's cat is Ginger")
 
-# initialization
-pygame.init()
-# width = 576
-# height = 1024
-width = 432
-height = 768
-screen = pygame.display.set_mode((width, height)) #width, height
-clock = pygame.time.Clock()
-game_font = pygame.font.Font('04B_19.TTF', 40)
+# F strings
+favourite_number = 6
+print('My name is ' + name + ' and my favourite number is ' + str(favourite_number))
+print(f'My name is {name} and my favourite number is {favourite_number}')
 
-#Game variables
-gravity = 0.20
-bird_movement = 0
-game_active = True
-score = 0
-high_score = 0
-can_score = True
+# Lists
+my_list = [1,2,3]
+print(my_list)
 
-# background surface
-bg_surface = pygame.image.load('assets/background-day.png').convert()
-bg_surface = pygame.transform.scale2x(bg_surface)
+my_list = ['hi', 2,3, [4,5]]
+print(my_list)
 
-# floor surface
-floor_surface = pygame.image.load('assets/base.png').convert()
-floor_surface = pygame.transform.scale2x(floor_surface)
-floor_x_position = 0
+my_list = ['a', 'b', 'c']
+my_list.append('d')
+print(my_list)
 
-# bird images and surface
-bird_downflap = pygame.transform.scale2x(pygame.image.load('assets/bluebird-downflap.png').convert())
-bird_midflap = pygame.transform.scale2x(pygame.image.load('assets/bluebird-midflap.png').convert())
-bird_upflap = pygame.transform.scale2x(pygame.image.load('assets/bluebird-upflap.png').convert())
-bird_frames = [bird_downflap, bird_midflap, bird_upflap]
-bird_index = 0
-bird_surface = bird_frames[bird_index]
-bird_rect = bird_surface.get_rect(center = (100,384))
+print(my_list[0])
+print(my_list[1])
+print(my_list[1:])
+print(my_list[:2])
 
-# bird userevent
-BIRDFLAP = pygame.USEREVENT
-pygame.time.set_timer(BIRDFLAP, 200)
+my_list[0] = 'NEW'
+print(my_list)
 
-# pipe surface and pipe userevent
-pipe_surface = pygame.image.load('assets/pipe-green.png').convert()
-pipe_surface = pygame.transform.scale2x(pipe_surface)
-pipe_list = []
-SPAWNPIPE = pygame.USEREVENT
-pygame.time.set_timer(SPAWNPIPE, 1200)
-pipe_height = [400, 500, 600,700]
+my_list = ['hi', 2,3, [4,5, [7,8,9]]]
+print(my_list[3][2][0])
 
-# game over surface
-game_over_surface = pygame.image.load('assets/message.png').convert_alpha()
-game_over_rect = game_over_surface.get_rect(center = (216, 354))
+# Dictionaries
+d = {'key1': 'item1', 'key2': 'item2'}
+print(d)
+print(d['key1'])
 
-# sounds
-flap_sound = pygame.mixer.Sound('sound/sfx_wing.wav')
-death_sound = pygame.mixer.Sound('sound/sfx_hit.wav')
-score_sound = pygame.mixer.Sound('sound/sfx_point.wav')
+# Booleans
+print(True)
+print(False)
 
-# game loop
-while True:
-	# event loop
-	for event in pygame.event.get():
-		# if user quits
-		if event.type == pygame.QUIT:
-			pygame.quit() 
-			sys.exit()
+# Comparison Operator
+print(1 > 2)
+print(1 < 2)
+print( 1 >= 1)
+print(1 <= 4)
+print(10 == 10)
+print('hi' == 'bye')
 
-		# if user presses any key on the keyboard
-		if event.type == pygame.KEYDOWN:
-			# if user presses spacebar while the game is active
-			if event.key == pygame.K_SPACE and game_active:
-				bird_movement = 0
-				bird_movement -= 8
-				flap_sound.play()
-			
-			# if user presses spacebar while the game is not active
-			if event.key == pygame.K_SPACE and game_active == False:
-				game_active = True
-				pipe_list.clear()
-				bird_rect.center = (100, 384)
-				bird_movement = 0
-				score = 0
+# if, elif, else
+if 1 < 2:
+	print('Yep!')
 
-		# custom event for spawning pipe
-		if event.type == SPAWNPIPE:
-			pipe_list.extend(create_pipe())
+x = 12
+if (x % 2 == 0):
+	print('Divisible by 2')
+elif x % 3 == 0:
+	print('Divisible by 3')
+else:
+	print('Not divisible by 2 or 3!')
 
-		# custom event for flapping bird wings
-		if event.type == BIRDFLAP:
-			if bird_index == 2:
-				bird_index = 0
-			else:
-				bird_index += 1
-			bird_surface, bird_rect = bird_animation()
-					
-	screen.blit(bg_surface, (0,0))
+# Conditional operators - and, or
 
-	if game_active:
-		# Bird
-		bird_movement += gravity
-		rotated_bird = rotate_bird(bird_surface)
-		bird_rect.centery += bird_movement
-		screen.blit(rotated_bird, bird_rect)
-		game_active = check_collision(pipe_list)
+if (x % 2 == 0 and x % 3 == 0):
+	print('Divisible by 2 and 3')
+elif (x % 2 == 0):
+	print('Divisible by 2')
+elif x % 3 == 0:
+	print('Divisible by 3')
+else:
+	print('Not divisible by 2 or 3!')
 
-		# Pipes
-		pipe_list = move_pipes(pipe_list)
-		draw_pipes(pipe_list)
+age = 19
+is_drunk = False
 
-		# Score
-		pipe_score_check()
-		score_display('main_game')
-	else: 
-		screen.blit(game_over_surface, game_over_rect)
-		high_score = update_high_score(score, high_score)
-		score_display('game_over')
+# if (age < 18 or is_drunk == True): this line and the below line are same
+if (age < 18 or is_drunk):
+	print('You cannot drive!')
+else:
+	print('You can drive!')
+
+# For loop
+my_list  = [1,2,3,4,5]
+print(my_list[0])
+print(my_list[1])
+print(my_list[2])
+
+for item in my_list:
+	print(item)
+
+for item in my_list:
+	print('yep')
+
+for jelly in my_list:
+	print(jelly + jelly)
 
 
-	# Floor
-	floor_x_position -= 1
-	draw_floor()
-	if floor_x_position <= -width:
-		floor_x_position = 0
-	
-	# update the display with the max refresh rate being 120hz
-	pygame.display.update()
-	clock.tick(120)
+# While loop
+i = 1
+while (i < 5):
+	print(f'i is {i}')
+	i = i + 1
+
+i = 1
+while(True):
+	print(f'i is {i}')
+	i = i + 1
+	if (i == 5):
+		break
+
+# Range
+for i in range(0, 5):
+	print(i)
+
+# Functions
+
+# I cannot reuse this!
+num = 2
+if (num % 2 == 0):
+	print(f'{num} is even!')
+else:
+	print(f'{num} is odd!')
+
+def check_even_odd(num):
+	if (num % 2 == 0):
+		print(f'{num} is even!')
+	else:
+		print(f'{num} is odd!')
+
+check_even_odd(2)
+check_even_odd(3)
+check_even_odd(5)
+print(check_even_odd(8))
+
+def calculate_square(num):
+	# return num * num
+	return num ** 2
+
+calculate_square(2)
+print(calculate_square(2))
