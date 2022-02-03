@@ -3,7 +3,7 @@ import pygame, sys, random
 # draw the moving floor
 def draw_floor():
 	screen.blit(floor_surface, (floor_x_position,900))
-	screen.blit(floor_surface, (floor_x_position + 576,900))
+	screen.blit(floor_surface, (floor_x_position + width,900))
 
 # create the top and bottom pipes
 def create_pipe():
@@ -22,7 +22,7 @@ def move_pipes(pipes):
 # draw the pipes on the screen
 def draw_pipes(pipes):
 	for pipe in pipes:
-		if pipe.bottom >= 1024:
+		if pipe.bottom >= height:
 			screen.blit(pipe_surface, pipe)
 		else:
 			flip_pipe = pygame.transform.flip(pipe_surface, False, True)
@@ -30,8 +30,12 @@ def draw_pipes(pipes):
 
 # initialization
 pygame.init()
+# width = 576
+# height = 1024
+width = 432
+height = 768
 
-screen = pygame.display.set_mode((576, 1024)) #width, height
+screen = pygame.display.set_mode((width, height)) #width, height
 clock = pygame.time.Clock()
 
 #Game variables
@@ -49,7 +53,7 @@ floor_x_position = 0
 
 bird_surface = pygame.image.load('assets/bluebird-midflap.png').convert()
 bird_surface = pygame.transform.scale2x(bird_surface)
-bird_rect = bird_surface.get_rect(center = (100,512))
+bird_rect = bird_surface.get_rect(center = (100,384))
 
 # pipe surface and pipe userevent
 pipe_surface = pygame.image.load('assets/pipe-green.png').convert()
@@ -57,7 +61,7 @@ pipe_surface = pygame.transform.scale2x(pipe_surface)
 pipe_list = []
 SPAWNPIPE = pygame.USEREVENT
 pygame.time.set_timer(SPAWNPIPE, 1200)
-pipe_height = [400, 600, 700, 750, 800]
+pipe_height = [400, 500, 600, 700]
 
 # game loop
 while True:
@@ -93,7 +97,7 @@ while True:
 	# Floor
 	floor_x_position -= 1
 	draw_floor()
-	if floor_x_position <= -576:
+	if floor_x_position <= -width:
 		floor_x_position = 0
 	
 	# update the display with the max refresh rate being 120hz
