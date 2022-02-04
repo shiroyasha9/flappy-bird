@@ -59,6 +59,13 @@ print(my_list)
 my_list = ['hi', 2,3, [4,5, [7,8,9]]]
 print(my_list[3][2][0])
 
+# Tuples
+t = (1,2,3)
+print(t[0])
+
+# this will give an error
+t[0] = 'NEW'
+
 # Dictionaries
 d = {'key1': 'item1', 'key2': 'item2'}
 print(d)
