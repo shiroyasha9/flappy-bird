@@ -82,7 +82,7 @@ bird_surface = bird_frames[bird_index]
 bird_rect = bird_surface.get_rect(center = (100,384))
 
 # bird userevent
-BIRDFLAP = pygame.USEREVENT
+BIRDFLAP = pygame.USEREVENT  + 1
 pygame.time.set_timer(BIRDFLAP, 200)
 
 # pipe surface and pipe userevent
