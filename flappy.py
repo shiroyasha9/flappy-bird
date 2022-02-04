@@ -200,7 +200,7 @@ while True:
 
 
 	# Floor
-	floor_x_position -= 1
+	floor_x_position -= 0.5
 	draw_floor()
 	if floor_x_position <= -width:
 		floor_x_position = 0
